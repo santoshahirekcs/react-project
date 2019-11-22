@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kcs-reactjs-deployment
+  labels:
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kcs-reactjs-deployment
+  template:
+    metadata:
+      labels:
+        app: kcs-reactjs-deployment
+    spec:
+      containers:
+      - name: kcs-reactjs
+        image: santoshahire/reactapp-image
+        ports:
+        - containerPort: 5000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kcs-reactjs
+spec:
+  ports:
+    - name: http
+      port: 80
+      nodePort: 30000
+      targetPort: 5000
+  selector:
+    app: kcs-reactjs-deployment
+  type: LoadBalancer
+  externalIPs:
+  - 192.168.4.95
